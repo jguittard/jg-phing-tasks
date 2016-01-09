@@ -1,0 +1,31 @@
+{
+  "name":     "jguittard/jg-phing-tasks",
+  "homepage": "https://github.com/jguittard/jg-phing-tasks",
+  "description": "Common Phing tasks",
+  "type": "library",
+  "license": "BSD-3",
+  "authors": [
+    {
+      "name": "Julien Guittard",
+      "email": "julien.guittard@me.com"
+    }
+  ],
+  "require":  {
+    "php": ">=5.4",
+    "phing/phing": "~2.7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.6",
+    "squizlabs/php_codesniffer": "^2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "JG\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "JGTests\\Task\\": "tests/"
+    }
+  }
+}

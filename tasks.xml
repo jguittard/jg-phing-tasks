@@ -1,0 +1,3 @@
+<project>
+    <taskdef name="sass" classname="JG\Task\SassTask" />
+</project>
