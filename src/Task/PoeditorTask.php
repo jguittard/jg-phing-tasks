@@ -36,7 +36,7 @@ class PoeditorTask extends Task
      *
      * @var string
      */
-    protected $project;
+    protected $module;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class PoeditorTask extends Task
     /**
      * @var string
      */
-    protected $module;
+    protected $moduleName;
 
     /**
      * Language code
@@ -147,29 +147,29 @@ class PoeditorTask extends Task
     }
 
     /**
-     * Get the id
+     * Get the module
      *
      * @return string
      */
-    public function getProject()
+    public function getModule()
     {
-        return $this->project;
+        return $this->module;
     }
 
     /**
-     * Set the id
+     * Set the module
      *
-     * @param string $project
+     * @param string $module
      * @return PoeditorTask
      */
-    public function setProject($project)
+    public function setModule($module)
     {
-        $parts = explode('-', $project);
+        $parts = explode('-', $module);
         if (count($parts) > 1) {
-            $this->module = ucfirst($parts[0]);
+            $this->moduleName = ucfirst($parts[0]);
             $this->id = $parts[1];
         }
-        $this->project = $project;
+        $this->module = $module;
         return $this;
     }
 
@@ -290,7 +290,7 @@ class PoeditorTask extends Task
 
     protected function retrieveFileName()
     {
-        return $this->getExportPath() . DIRECTORY_SEPARATOR . ucfirst($this->project) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $this->languages[$this->getLanguage()] . '.' . $this->getType();
+        return $this->getExportPath() . DIRECTORY_SEPARATOR . ucfirst($this->moduleName) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $this->languages[$this->getLanguage()] . '.' . $this->getType();
     }
 
     /**
