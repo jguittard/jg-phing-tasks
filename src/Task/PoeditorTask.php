@@ -32,11 +32,21 @@ class PoeditorTask extends Task
     protected $token;
 
     /**
-     * ID of the project
+     * Identifier of the project
      *
      * @var string
      */
     protected $project;
+
+    /**
+     * @var string
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $module;
 
     /**
      * Language code
@@ -154,6 +164,11 @@ class PoeditorTask extends Task
      */
     public function setProject($project)
     {
+        $parts = explode('-', $project);
+        if (count($parts) > 1) {
+            $this->module = ucfirst($parts[0]);
+            $this->id = $parts[1];
+        }
         $this->project = $project;
         return $this;
     }
@@ -275,7 +290,7 @@ class PoeditorTask extends Task
 
     protected function retrieveFileName()
     {
-        return $this->getExportPath() . DIRECTORY_SEPARATOR . $this->languages[$this->getLanguage()] . '.' . $this->getType();
+        return $this->getExportPath() . DIRECTORY_SEPARATOR . ucfirst($this->project) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $this->languages[$this->getLanguage()] . '.' . $this->getType();
     }
 
     /**
@@ -286,7 +301,7 @@ class PoeditorTask extends Task
         return [
             'api_token' => $this->getToken(),
             'action' => 'export',
-            'id' => $this->getProject(),
+            'id' => $this->id,
             'type' => $this->getType() ?: self::DEFAULT_TYPE,
             'language' => $this->getLanguage(),
         ];
