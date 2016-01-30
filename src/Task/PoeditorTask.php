@@ -2,7 +2,7 @@
 
 namespace JG\Task;
 
-use Guzzle\Http\Client;;
+use Guzzle\Http\Client;
 use \Task;
 
 /**
@@ -14,7 +14,7 @@ use \Task;
  */
 class PoeditorTask extends Task
 {
-    const API_ENDPOINT = 'https://poeditor.com/api';
+    const API_ENDPOINT = 'https://poeditor.com/api/';
 
     const DEFAULT_TYPE = 'po';
 
@@ -36,7 +36,7 @@ class PoeditorTask extends Task
      *
      * @var string
      */
-    protected $id;
+    protected $project;
 
     /**
      * Language code
@@ -141,20 +141,20 @@ class PoeditorTask extends Task
      *
      * @return string
      */
-    public function getId()
+    public function getProject()
     {
-        return $this->id;
+        return $this->project;
     }
 
     /**
      * Set the id
      *
-     * @param string $id
+     * @param string $project
      * @return PoeditorTask
      */
-    public function setId($id)
+    public function setProject($project)
     {
-        $this->id = $id;
+        $this->project = $project;
         return $this;
     }
 
@@ -259,15 +259,18 @@ class PoeditorTask extends Task
     public function main()
     {
         $client = new Client();
-        $response = $client->post(self::API_ENDPOINT, null, $this->getPostParams())->send();
+        $request = $client->post(self::API_ENDPOINT, null, $this->getPostParams());
+        $response = $request->send();
         if ($response->getStatusCode() != 200) {
-
+            throw new \BuildException('Unable to retrieve translation file');
         }
         $json = $response->json();
 
         $item = $json['item'];
 
-        $this->apiClient->get($item, null, ['sink' => $this->retrieveFileName()])->send();
+        $handle = fopen($this->retrieveFileName(), 'w');
+        $client->get($item, null, [Client::CURL_OPTIONS => ['CURLOPT_FILE' => $handle]])->send();
+        fclose($handle);
     }
 
     protected function retrieveFileName()
@@ -283,7 +286,7 @@ class PoeditorTask extends Task
         return [
             'api_token' => $this->getToken(),
             'action' => 'export',
-            'id' => $this->getId(),
+            'id' => $this->getProject(),
             'type' => $this->getType() ?: self::DEFAULT_TYPE,
             'language' => $this->getLanguage(),
         ];
