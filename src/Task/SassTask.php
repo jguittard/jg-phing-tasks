@@ -10,7 +10,7 @@ use \BuildException;
  *
  * @package     JG\Task
  * @version     1.0
- * @author      Julien Guittard <julien.guittard@mme.com>
+ * @author      Julien Guittard <julien.guittard@me.com>
  */
 class SassTask extends Task
 {

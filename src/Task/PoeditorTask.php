@@ -2,7 +2,7 @@
 
 namespace JG\Task;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use \Task;
 
 /**
@@ -10,7 +10,7 @@ use \Task;
  *
  * @package     JG\Task
  * @version     1.0
- * @author      Julien Guittard <julien.guittard@mme.com>
+ * @author      Julien Guittard <julien.guittard@me.com>
  */
 class PoeditorTask extends Task
 {
@@ -96,11 +96,6 @@ class PoeditorTask extends Task
         'en' => 'en_US',
         'es' => 'es_ES',
     ];
-
-    /**
-     * @var Client
-     */
-    protected $apiClient;
 
     /**
      * Get the type
@@ -274,18 +269,15 @@ class PoeditorTask extends Task
     public function main()
     {
         $client = new Client();
-        $request = $client->post(self::API_ENDPOINT, null, $this->getPostParams());
-        $response = $request->send();
-        if ($response->getStatusCode() != 200) {
-            throw new \BuildException('Unable to retrieve translation file');
-        }
-        $json = $response->json();
+        $response = $client->request('POST', self::API_ENDPOINT, [
+            'form_params' => $this->getPostParams()
+        ]);
+        $json = json_decode($response->getBody(), true);
+        $file = $json['item'];
 
-        $item = $json['item'];
+        echo '[Module ' . ucfirst($this->moduleName) . ']' . 'Downloading ' . strtoupper($this->getLanguage()) . ' file from ' . $file;
 
-        $handle = fopen($this->retrieveFileName(), 'w');
-        $client->get($item, null, [Client::CURL_OPTIONS => ['CURLOPT_FILE' => $handle]])->send();
-        fclose($handle);
+        $client->request('GET', $file, ['sink' => $this->retrieveFileName()]);
     }
 
     protected function retrieveFileName()

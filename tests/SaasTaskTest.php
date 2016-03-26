@@ -8,7 +8,7 @@ use JG\Task\SassTask;
  *
  * @package     JGTest\Task
  * @version     1.0
- * @author      Julien Guittard <julien.guittard@mme.com>
+ * @author      Julien Guittard <julien.guittard@me.com>
  */
 class SaasTaskTest extends \PHPUnit_Framework_TestCase
 {
