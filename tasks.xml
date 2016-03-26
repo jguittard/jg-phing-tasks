@@ -1,4 +1,5 @@
 <project>
     <taskdef name="sass" classname="JG\Task\SassTask" />
     <taskdef name="poeditor" classname="JG\Task\PoeditorTask" />
+    <taskdef name="loadConfig" classname="JG\Task\LoadConfigTask" />
 </project>
