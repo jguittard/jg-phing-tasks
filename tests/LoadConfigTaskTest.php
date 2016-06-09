@@ -53,10 +53,24 @@ class LoadConfigTaskTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function waitPropertySetter()
+    public function testWaitSetter()
     {
         $wait = 5;
         $this->assertSame($this->task, $this->task->setWait($wait));
         $this->assertAttributeSame($wait, 'wait', $this->task);
+    }
+
+    public function testTypeSetter()
+    {
+        $type = 'ini';
+        $this->assertSame($this->task, $this->task->setType($type));
+        $this->assertAttributeSame($type, 'type', $this->task);
+    }
+
+    public function testInvalidTypeThrowsException()
+    {
+        $type = 'foo';
+        $this->setExpectedException('InvalidArgumentException');
+        $this->task->setType($type);
     }
 }
